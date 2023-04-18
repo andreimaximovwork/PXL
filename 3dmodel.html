@@ -1,47 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3D Model</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Viewer</title>
+    <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-      body {
-        margin: 0;
-      }
-      canvas {
-        display: block;
-      }
+        model-viewer {
+            width: 100%;
+            height: 100%;
+        }
     </style>
-  </head>
-  <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gltf-loader@1.0.0-beta.4/dist/three-gltf-loader.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.js"></script>
-    <script>
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-
-      const controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-      const gltfLoader = new THREE.GLTFLoader();
-      gltfLoader.load('PXL.glb', (gltf) => {
-        scene.add(gltf.scene);
-      });
-
-      const light = new THREE.AmbientLight(0xffffff);
-      scene.add(light);
-
-      camera.position.z = 5;
-
-      function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-      }
-      animate();
-    </script>
-  </body>
+</head>
+<body>
+    <model-viewer ar src="https://storage.googleapis.com/mannequin/blobs/ebdb72d5-93c9-4d66-a8c1-76ee47ee65ab.glb" shadow-intensity="1" camera-controls auto-rotate tabindex="0"></model-viewer>
+</body>
 </html>
