@@ -3,56 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GLB Viewer</title>
+  <title>Model Viewer</title>
+  <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
   <style>
     body { margin: 0; }
-    canvas { display: block; }
+    .mqn3-view-in-ar-modal {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+    }
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      max-width: 800px;
+      max-height: 800px;
+    }
   </style>
 </head>
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/jsm/controls/OrbitControls.js"></script>
-  <script>
-    const url = 'https://storage.googleapis.com/mannequin/blobs/ebdb72d5-93c9-4d66-a8c1-76ee47ee65ab.glb';
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.1;
-    controls.screenSpacePanning = false;
-
-    const light = new THREE.HemisphereLight(0xffffff, 0x080808, 1);
-    scene.add(light);
-
-    camera.position.z = 5;
-
-    const loader = new THREE.GLTFLoader();
-    loader.load(url, (gltf) => {
-      scene.add(gltf.scene);
-    }, undefined, (error) => {
-      console.error(error);
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      renderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-    });
-  </script>
+  <div class="mqn3-view-in-ar-modal" role="dialog">
+    <button class="mqn3-view-in-ar-modal__x" aria-label="Close modal"></button>
+    <model-viewer ar="" src="https://storage.googleapis.com/mannequin/blobs/ebdb72d5-93c9-4d66-a8c1-76ee47ee65ab.glb" ios-src="https://storage.googleapis.com/mannequin/blobs/8d687b86-08ce-4dc1-8d02-6afa46ec77ab.usdz" shadow-intensity="1" camera-controls="" auto-rotate="" style="" autoplay="" tabindex="0" ar-status="not-presenting"></model-viewer>
+  </div>
 </body>
 </html>
