@@ -1,18 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Model Viewer</title>
-    <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <style>
-        model-viewer {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLB Viewer</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
 </head>
 <body>
-    <model-viewer ar src="https://storage.googleapis.com/mannequin/blobs/ebdb72d5-93c9-4d66-a8c1-76ee47ee65ab.glb" shadow-intensity="1" camera-controls auto-rotate tabindex="0"></model-viewer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gltf-loader/1.2.0/GLTFLoader.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OrbitControls.js/2.2.5/OrbitControls.min.js"></script>
+  <script>
+    const url = 'https://storage.googleapis.com/mannequin/blobs/ebdb72d5-93c9-4d66-a8c1-76ee47ee65ab.glb';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+    controls.screenSpacePanning = false;
+
+    const light = new THREE.HemisphereLight(0xffffff, 0x080808, 1);
+    scene.add(light);
+
+    camera.position.z = 5;
+
+    const loader = new THREE.GLTFLoader();
+    loader.load(url, (gltf) => {
+      scene.add(gltf.scene);
+    }, undefined, (error) => {
+      console.error(error);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    });
+  </script>
 </body>
 </html>
